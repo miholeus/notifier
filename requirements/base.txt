@@ -1,2 +1,2 @@
-crossbar
-autobahn[twisted]
+crossbar==0.15.0
+autobahn[twisted]==0.16.0
