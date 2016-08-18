@@ -7,6 +7,7 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import ApplicationSession
 from autobahn.twisted.wamp import ApplicationRunner
 from queue import NotificationRunner
+from config.settings import REALM_NAME, WEB_SOCKET_HOST, WEB_SOCKET_PORT
 
 
 class ListenForEvent(ApplicationSession):
@@ -29,5 +30,5 @@ class ListenForEvent(ApplicationSession):
 
 # Start reactor here
 if __name__ == '__main__':
-    runner = ApplicationRunner("ws://localhost:8081/ws", "messaging")
+    runner = ApplicationRunner("ws://%s:%d/ws" % (WEB_SOCKET_HOST, WEB_SOCKET_PORT), REALM_NAME)
     runner.run(ListenForEvent)

@@ -15,7 +15,8 @@ class NotificationRunner:
     Runs Notification consumer that publishes messages to user's channel
     """
     def __init__(self, wamp_session = None):
-        self.parameters = pika.ConnectionParameters()
+        credentials = pika.PlainCredentials(username=RABBITMQ_USER, password=RABBITMQ_PASS)
+        self.parameters = pika.ConnectionParameters(credentials=credentials)
         self.client = protocol.ClientCreator(reactor, twisted_connection.TwistedProtocolConnection, self.parameters)
         self.session = wamp_session
 
@@ -50,8 +51,7 @@ class NotificationRunner:
             if self.session:
                 self.session.publish("user.notification", body)
 
-        yield
-        # yield ch.basic_ack(delivery_tag=method.delivery_tag)
+        yield ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def connect(self):
         d = self.client.connectTCP(RABBITMQ_HOST, RABBITMQ_PORT)
