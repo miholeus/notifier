@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter example</title>
+    <meta charset='utf-8'>
+    <script>
+        AUTOBAHN_DEBUG = true;
+        WS_SERVER = '127.0.0.1:8081';
+    </script>
+    <script src="https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz"></script>
+
+    <style type="text/css">
+        #container {
+            width: 427px;
+            margin: auto;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="demo_body">
+    <div id="container">
+        Counter Demo example<br/>
+        <div class="status_line">
+            Status: <span class="statusline"></span>
+        </div>
+        <div class="counter_line">
+            <span class="counter"></span>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+    var player = {};
+
+    /* We will use vanilla JS to avoid mixing in jQuery
+     concepts. I'm NOT gonna use best practices because
+     I don't want to saturate the code with a lot of
+     off topic details */
+
+    /* Run the code once the page is loaded */
+    window.addEventListener("load", function () {
+
+        console.log("loaded");
+        var updateStatusline = function (statusline) {
+            document.getElementsByClassName("statusline")[0].innerHTML = statusline;
+        };
+        var updateCounter = function (counter) {
+            document.getElementsByClassName("counter")[0].innerHTML = counter;
+        };
+
+        // the URL of the WAMP Router (Crossbar.io)
+        //
+        var wsuri;
+        if (document.location.origin == "file://") {
+            wsuri = "ws://" + WS_SERVER;
+
+        } else {
+            wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
+                    document.location.host + "/ws";
+        }
+
+        var httpUri;
+
+        if (document.location.origin == "file://") {
+            httpUri = "http://" + WS_SERVER + "/lp";
+
+        } else {
+            httpUri = (document.location.protocol === "http:" ? "http:" : "https:") + "//" +
+                    document.location.host + "/lp";
+        }
+
+
+        // the WAMP connection to the Router
+        //
+        var connection = new autobahn.Connection({
+            // url: wsuri,
+            transports: [
+                {
+                    'type': 'websocket',
+                    'url': wsuri
+                },
+                {
+                    'type': 'longpoll',
+                    'url': httpUri
+                }
+            ],
+            realm: "messaging"
+        });
+
+        /* Run this code once the connection is
+         successful. Note that I don't handle
+         any error cases in this demo since
+         it's a rabbit hole I don't want to
+         fall in right now. */
+        connection.onopen = function (session, details) {
+
+            console.log("connected");
+
+            if (details.x_cb_node_id) {
+                updateStatusline("Connected to node <strong>" + details.x_cb_node_id + "</strong> at " + wsuri);
+            } else {
+                updateStatusline("Connected to " + wsuri);
+            }
+
+            // 1) subscribe to a topic
+            function onevent(args) {
+                updateCounter("Counter: " + args[0]);
+            }
+
+            session.subscribe('com.myapp.hello', onevent);
+        };
+
+
+        connection.onclose = function (reason, details) {
+            console.log("connection closed ", reason, details);
+
+            if (details.will_retry) {
+                updateStatusline("Trying to reconnect in " + parseInt(details.retry_delay) + " s.");
+            } else {
+                updateStatusline("Disconnected");
+            }
+        };
+
+        /* Opening the connection once all the callbacks are set */
+        connection.open();
+    });
+
+</script>
+
+</html>

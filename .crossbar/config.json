@@ -44,6 +44,10 @@
                         "port": 8081
                     },
                     "paths": {
+                        "/": {
+                            "type": "static",
+                            "directory": "../web"
+                        },
                         "ws": {
                             "type": "websocket"
                         },

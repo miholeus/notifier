@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks
+from autobahn.twisted.util import sleep
 
 # autobahn is the de facto Python lib to build
 # WAMP clients
@@ -18,12 +19,20 @@ class ListenForEvent(ApplicationSession):
         self.config = config
 
     def onConnect(self):
+        print("connected")
         self.join(self.config.realm)
 
     @inlineCallbacks
     def onJoin(self, details):
-        callback = lambda x: log.msg("Received event %s" % x)
-        yield self.subscribe(callback, 'un_evenement')
+        # callback = lambda x: log.msg("Received event %s" % x)
+        # yield self.subscribe(callback, 'un_evenement')
+        print("session ready")
+
+        counter = 0
+        while True:
+            self.publish('com.myapp.hello', counter)
+            counter += 1
+            yield sleep(1)
 
 # Python doesn't have a default event loop, so
 # we need to start one
