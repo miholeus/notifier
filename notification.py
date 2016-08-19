@@ -24,8 +24,15 @@ class ListenForEvent(ApplicationSession):
     def onJoin(self, details):
         # callback = lambda x: log.msg("Received event %s" % x)
         # yield self.subscribe(callback, 'un_evenement')
-        print("session ready")
+        print("Client session joined: {}".format(details))
         yield self.runner.connect()
+
+    def onLeave(self, details):
+        print('Client session left: {}'.format(details))
+        self.disconnect()
+
+    def onDisconnect(self):
+        print('Client session disconnected.')
 
 
 # Start reactor here

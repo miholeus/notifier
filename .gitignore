@@ -13,3 +13,4 @@ crossbarexamples
 *.iml
 .idea
 .crossbar/node.pid
+config/local.py*

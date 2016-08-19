@@ -2,14 +2,13 @@
 
 from __future__ import unicode_literals
 
-from twisted.python import log
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.util import sleep
 
-# autobahn is the de facto Python lib to build
-# WAMP clients
 from autobahn.twisted.wamp import ApplicationSession
 from autobahn.twisted.wamp import ApplicationRunner
+
+from config.settings import REALM_NAME, WEB_SOCKET_HOST, WEB_SOCKET_PORT
 
 
 class ListenForEvent(ApplicationSession):
@@ -30,12 +29,12 @@ class ListenForEvent(ApplicationSession):
 
         counter = 0
         while True:
-            self.publish('com.myapp.hello', counter)
+            self.publish('com.messaging.demo', counter)
             counter += 1
             yield sleep(1)
 
 # Python doesn't have a default event loop, so
 # we need to start one
 if __name__ == '__main__':
-    runner = ApplicationRunner("ws://localhost:8081/ws", "messaging")
+    runner = ApplicationRunner("ws://%s:%d/ws" % (WEB_SOCKET_HOST, WEB_SOCKET_PORT), REALM_NAME)
     runner.run(ListenForEvent)

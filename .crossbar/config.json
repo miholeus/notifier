@@ -14,14 +14,43 @@
                     "name": "messaging",
                     "roles": [
                         {
-                            "name": "anonymous",
+                            "name": "public",
                             "permissions": [
                                 {
-                                    "uri": "",
+                                    "uri": "notifications.*",
+                                    "allow": {
+                                        "call": false,
+                                        "register": false,
+                                        "publish": true,
+                                        "subscribe": true
+                                    },
+                                    "cache": true
+                                },
+                                {
+                                    "uri": "system",
                                     "match": "prefix",
                                     "allow": {
                                         "call": true,
                                         "register": true,
+                                        "publish": true,
+                                        "subscribe": true
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        },
+                        {
+                            "name": "anonymous",
+                            "permissions": [
+                                {
+                                    "uri": "com.messaging.demo",
+                                    "allow": {
+                                        "call": false,
+                                        "register": false,
                                         "publish": true,
                                         "subscribe": true
                                     },
@@ -49,7 +78,18 @@
                             "directory": "../web"
                         },
                         "ws": {
-                            "type": "websocket"
+                            "type": "websocket",
+                            "auth": {
+                                "ticket": {
+                                    "type": "static",
+                                    "principals": {
+                                        "joe": {
+                                            "ticket": "test",
+                                            "role": "public"
+                                        }
+                                    }
+                                }
+                            }
                         },
                         "lp": {
                             "type": "longpoll"

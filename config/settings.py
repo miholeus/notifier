@@ -13,3 +13,9 @@ NOTIFICATION_ROUTING_KEY = u'send.notification'
 REALM_NAME = u'messaging'
 WEB_SOCKET_HOST = u'127.0.0.1'
 WEB_SOCKET_PORT = 8081
+
+
+try:
+    from .local import *
+except ImportError:
+    pass

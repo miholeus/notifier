@@ -5,16 +5,17 @@ from __future__ import unicode_literals
 from pika.adapters import twisted_connection
 from twisted.internet import defer, reactor, protocol, task
 from config.settings import *
-from twisted.python import log
+from twisted.logger import Logger
 
 import pika
 
 
 class NotificationRunner:
+    log = Logger()
     """
     Runs Notification consumer that publishes messages to user's channel
     """
-    def __init__(self, wamp_session = None):
+    def __init__(self, wamp_session=None):
         credentials = pika.PlainCredentials(username=RABBITMQ_USER, password=RABBITMQ_PASS)
         self.parameters = pika.ConnectionParameters(credentials=credentials)
         self.client = protocol.ClientCreator(reactor, twisted_connection.TwistedProtocolConnection, self.parameters)
@@ -47,9 +48,9 @@ class NotificationRunner:
         ch, method, properties, body = yield queue_object.get()
 
         if body:
-            log.msg(body)
+            self.log.info(body)
             if self.session:
-                self.session.publish("user.notification", body)
+                self.session.publish("notifications.user", body)
 
         yield ch.basic_ack(delivery_tag=method.delivery_tag)
 
