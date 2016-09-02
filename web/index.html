@@ -28,6 +28,13 @@
         <div class="notification_line">
 
         </div>
+        <form>
+            <label for="user-input">Login:</label><br />
+            <input type="text" id="user-input" value="demo"><br/>
+            <label for="token-input">Token:</label><br />
+            <input type="text" id="token-input"><br/>
+            <input type="button" onclick="connectToServer()" value="Connect">
+        </form>
     </div>
 </div>
 
@@ -35,8 +42,7 @@
 
 <script>
 
-    /* Run the code once the page is loaded */
-    window.addEventListener("load", function () {
+     function connectToServer() {
 
         console.log("loaded");
         var updateStatusline = function (statusline) {
@@ -67,6 +73,19 @@
                     document.location.host + "/lp";
         }
 
+        var user = document.getElementById('user-input').value || "demo";
+        var key = document.getElementById('token-input').value;
+
+        function onchallenge (session, method, extra) {
+
+            console.log("onchallenge", method, extra);
+
+            if (method === "ticket") {
+                return key;
+            } else {
+                throw "don't know how to authenticate using '" + method + "'";
+            }
+        }
 
         // the WAMP connection to the Router
         //
@@ -82,7 +101,10 @@
                     'url': httpUri
                 }
             ],
-            realm: "messaging"
+            realm: "messaging",
+            authmethods: ['ticket'],
+            authid: user,
+            onchallenge: onchallenge
         });
 
         /* Run this code once the connection is
@@ -121,7 +143,7 @@
 
         /* Opening the connection once all the callbacks are set */
         connection.open();
-    });
+    };
 
 </script>
 

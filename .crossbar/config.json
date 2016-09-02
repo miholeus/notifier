@@ -14,6 +14,46 @@
                     "name": "messaging",
                     "roles": [
                         {
+                            "name": "authenticator",
+                            "permissions": [
+                                {
+                                    "uri": "authenticate",
+                                    "match": "exact",
+                                    "allow": {
+                                        "call": false,
+                                        "register": true,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        },
+                        {
+                            "name": "backend",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": false,
+                                        "register": false,
+                                        "publish": true,
+                                        "subscribe": true
+                                    },
+                                    "disclose": {
+                                        "caller": false,
+                                        "publisher": false
+                                    },
+                                    "cache": true
+                                }
+                            ]
+                        },
+                        {
                             "name": "public",
                             "permissions": [
                                 {
@@ -81,13 +121,8 @@
                             "type": "websocket",
                             "auth": {
                                 "ticket": {
-                                    "type": "static",
-                                    "principals": {
-                                        "joe": {
-                                            "ticket": "test",
-                                            "role": "public"
-                                        }
-                                    }
+                                    "type": "dynamic",
+                                    "authenticator": "authenticate"
                                 }
                             }
                         },
@@ -95,6 +130,20 @@
                             "type": "longpoll"
                         }
                     }
+                }
+            ],
+            "components": [
+                {
+                    "type": "class",
+                    "classname": "authenticator.AuthenticatorSession",
+                    "realm": "messaging",
+                    "role": "authenticator"
+                },
+                {
+                    "type": "class",
+                    "classname": "notification.ListenForEvent",
+                    "realm": "messaging",
+                    "role": "backend"
                 }
             ]
         }

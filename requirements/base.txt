@@ -1,3 +1,5 @@
 crossbar==0.15.0
 autobahn[twisted]==0.16.0
 pika==0.10.0
+redis
+phpserialize==1.3
