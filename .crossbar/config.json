@@ -40,8 +40,8 @@
                                     "uri": "",
                                     "match": "prefix",
                                     "allow": {
-                                        "call": false,
-                                        "register": false,
+                                        "call": true,
+                                        "register": true,
                                         "publish": true,
                                         "subscribe": true
                                     },
