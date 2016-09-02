@@ -123,6 +123,10 @@
                                 "ticket": {
                                     "type": "dynamic",
                                     "authenticator": "authenticate"
+                                },
+                                "anonymous": {
+                                    "type": "static",
+                                    "role": "anonymous"
                                 }
                             }
                         },
