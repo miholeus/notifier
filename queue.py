@@ -8,6 +8,7 @@ from config.settings import *
 from twisted.logger import Logger
 
 import pika
+import json
 
 
 class NotificationRunner:
@@ -48,9 +49,27 @@ class NotificationRunner:
         ch, method, properties, body = yield queue_object.get()
 
         if body:
-            self.log.info(body)
+            data = json.loads(body)
+            """
+            {
+              'channel': '',
+              'created_by': {
+                'first_name': '',
+                'id': 0,
+                'last_name': '',
+                'login': '',
+                'middle_name': None,
+                'photo': ''
+              },
+              'event_id': '',
+              'message': ''
+            }
+            """
+            self.log.info("New Event {}".format(data.get('event_id')))
+            self.log.info(data.get('message'))
+            self.log.info("==============")
             if self.session:
-                self.session.publish("notifications.user", body)
+                self.session.publish(data.get('channel'), data.get('message'))
 
         yield ch.basic_ack(delivery_tag=method.delivery_tag)
 
