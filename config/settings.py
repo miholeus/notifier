@@ -7,8 +7,8 @@ RABBITMQ_USER = 'guest'
 RABBITMQ_PASS = 'guest'
 # Queue settings
 NOTIFICATION_EXCHANGE = u'notification.exchange'
-NOTIFICATION_QUEUE = u'notification.awaiting'
-NOTIFICATION_ROUTING_KEY = u'send.notification'
+NOTIFICATION_QUEUE = u'notification.push.websockets'
+NOTIFICATION_ROUTING_KEY = u'push_notification.websockets'
 # Web sockets settings
 REALM_NAME = u'messaging'
 WEB_SOCKET_HOST = u'127.0.0.1'
