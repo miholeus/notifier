@@ -14,3 +14,4 @@ crossbarexamples
 .idea
 .crossbar/node.pid
 config/local.py*
+*.pyc
