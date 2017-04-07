@@ -37,8 +37,8 @@ class AuthenticatorSession(ApplicationSession):
                 raise ApplicationError(u"no_such_user", u"could not authenticate session - no such principal {}".format(authid))
 
             ticket = loads(data)
-            # ticket holds 3 values!!!
-            user_id, login, password = ticket.values()
+            # ticket holds 5 values!!!
+            user_id, login, password, roles, is_enabled = ticket.values()
 
             if authid == login:
                 principal = {
