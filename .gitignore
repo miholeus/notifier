@@ -13,5 +13,6 @@ crossbarexamples
 *.iml
 .idea
 .crossbar/node.pid
+.crossbar/key.priv
 config/local.py*
 *.pyc
