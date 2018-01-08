@@ -1,4 +1,4 @@
-Realtime messaging support for ISUP project
+Realtime messaging support 
 
 Messaging is based on websockets.
 Publisher takes messages from RabbitMQ and sends them to consumers.
