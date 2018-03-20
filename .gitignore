@@ -16,3 +16,5 @@ crossbarexamples
 .crossbar/key.priv
 config/local.py*
 *.pyc
+# MyPy cache
+.mypy_cache/
