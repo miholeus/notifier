@@ -1,4 +1,4 @@
-Realtime messaging support 
+Realtime messaging support
 
 ### Notifier
 
@@ -29,4 +29,12 @@ WebSocket host and port for messaging
 ```
 WEB_SOCKET_HOST = u'127.0.0.1'
 WEB_SOCKET_PORT = 8081
+```
+
+### Installation
+
+Install crossbar (http://crossbar.io).
+Run
+```
+crossbar start
 ```
