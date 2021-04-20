@@ -8,7 +8,7 @@ name = "pypi"
 [packages]
 
 crossbar = "==0.15.0"
-autobahn = {extras = ["twisted"], version = "==0.16.0"}
+autobahn = {extras = ["twisted"], version = "==20.12.3"}
 pika = "==0.10.0"
 redis = "*"
 phpserialize = "==1.3"
